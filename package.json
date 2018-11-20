@@ -1,0 +1,16 @@
+{
+  "name": "@npmtest/fourleaf-script",
+  "version": "1.0.0",
+  "description": "",
+  "main": "options.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "csv": "^4.0.0",
+    "csv-parse": "^3.2.0"
+  }
+}
