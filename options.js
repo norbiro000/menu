@@ -13,6 +13,7 @@ const OPTION_FROM = 6
 fs.createReadStream(process.argv[2]).pipe(parser)
 try {
   fs.unlinkSync('options_sets.csv')
+  fs.unlinkSync('menu.csv')
 } catch (e) {}
 
 parser.on('readable', function () {
@@ -46,10 +47,9 @@ function isDupplicatedOptionName (optionName) {
 function getOptionSetNameFromOptionsChoicesInRow (item) {
   return new Promise ((resolve, reject) => {
     try {
-      console.log(item[2])
       let options_set_name = ''
       for (let i = OPTION_SETS_COLUMN; i < item.length; i++ ) {
-        options_set_name = options_set_name + item[i]
+        options_set_name = options_set_name + item[i].replace(/ / ,'')
       }
       resolve(options_set_name)
     } catch (e) {
@@ -60,11 +60,14 @@ function getOptionSetNameFromOptionsChoicesInRow (item) {
 
 async function processItemToOptionSet (item, options_set_name) {
   return new Promise ((resolve, reject) => {
+    if (!options_set_name) {
+      return resolve()
+    }
     let csv = ''
-      csv = csv + '' + options_set_name + ', '
+      csv = csv + '' + options_set_name + ','
       for (var i = OPTION_FROM; i < item.length; i++) {
         if ('' !== item[i].replace(/ /, '')) {
-          csv = csv + '' + item[i] + ', '
+          csv = csv + '' + item[i] + ','
         }
       }
       csv = csv + '\n'
@@ -76,6 +79,14 @@ async function processItemToOptionSet (item, options_set_name) {
 async function processMenuCSV (item, options_set_name) {
   return new Promise ((resolve, reject) => {
     // TODO: Create file menu.csv
+    let menu = ''
+    for (let i = 0; i < OPTION_FROM; i++) {
+      menu += item[i]
+      menu += ','
+    }
+    menu += options_set_name
+    menu += '\n'
+    resolve(menu)
   })
 }
 
@@ -84,16 +95,21 @@ async function processRow (item, callback) {
     let NOT_DUPPLICATED_OPTIONS_SET_NAME = false
 
     // 1. Process item to options_set name.
-    let options_set_name = await getOptionSetNameFromOptionsChoicesInRow(item
-      )
+    let options_set_name = await getOptionSetNameFromOptionsChoicesInRow(item)
+
     // 2. Check is dupplicated options_set.
     let result = await isDupplicatedOptionName(options_set_name)
+
+    let menu = await processMenuCSV(item, options_set_name)
+    fs.appendFileSync('menu.csv', menu)
 
     if (result == NOT_DUPPLICATED_OPTIONS_SET_NAME) {
       // if not dupplicated 
       // 3. convert item row to csv comma style syntax.
       let csvOptionsText = await processItemToOptionSet(item, options_set_name)
       // console.log(csvOptionsText)
+
+      // write file
       fs.appendFileSync('options_sets.csv', csvOptionsText)
     }
 
