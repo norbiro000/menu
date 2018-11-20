@@ -81,17 +81,23 @@ async function processMenuCSV (item, options_set_name) {
 
 async function processRow (item, callback) {
   try {
-    // 1. Check option is not duplicated
     let NOT_DUPPLICATED_OPTIONS_SET_NAME = false
-    let options_set_name = await getOptionSetNameFromOptionsChoicesInRow(item)
+
+    // 1. Process item to options_set name.
+    let options_set_name = await getOptionSetNameFromOptionsChoicesInRow(item
+      )
+    // 2. Check is dupplicated options_set.
     let result = await isDupplicatedOptionName(options_set_name)
 
     if (result == NOT_DUPPLICATED_OPTIONS_SET_NAME) {
+      // if not dupplicated 
+      // 3. convert item row to csv comma style syntax.
       let csvOptionsText = await processItemToOptionSet(item, options_set_name)
       // console.log(csvOptionsText)
       fs.appendFileSync('options_sets.csv', csvOptionsText)
     }
 
+    // Callback to next main iterator
     return callback()
   } catch(e) {
     console.log(e)
