@@ -4,7 +4,7 @@
   "description": "",
   "main": "options.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "keywords": [],
   "author": "",
@@ -12,5 +12,8 @@
   "dependencies": {
     "csv": "^4.0.0",
     "csv-parse": "^3.2.0"
+  },
+  "devDependencies": {
+    "mocha": "^5.2.0"
   }
 }
