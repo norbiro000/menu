@@ -5,7 +5,7 @@ const parser = parse({
   delimiter: ','
 })
 
-const menuProcessor = new MenuProcess()
+const menuProcessor = new MenuProcess(6)
 
 // FILE READ
 fs.createReadStream(process.argv[2]).pipe(parser)
@@ -17,12 +17,13 @@ try {
 parser.on('readable', function () {
   let record
   while (record = parser.read()) {
-    processRow(record)
+    menuProcessor.pushItem(record)
   }
 })
 
 parser.on('end', function () {
-  console.log('done')
+  menuProcessor.saveOptionSetsTo('options_set.csv')
+  menuProcessor.saveMenuTo('menu.csv')
 })
 
 async function processRow (item, callback) {
