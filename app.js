@@ -5,8 +5,6 @@ const parser = parse({
   delimiter: ','
 })
 
-const output = []
-
 const menuProcessor = new MenuProcess()
 
 // FILE READ
