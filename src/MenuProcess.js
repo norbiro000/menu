@@ -1,4 +1,5 @@
 const fs = require('fs')
+const fontColor = require('../commons/cmd_color')
 
 let NOT_DUPPLICATED_OPTIONS_SET_NAME = false
 
@@ -68,17 +69,17 @@ class Menu {
   async pushItem (item) {
     try {
       // 1. Process item to options_set name.
-    let options_set_name = await this.getOptionSetNameFromOptionsChoicesInRow(item, 6)
+    let options_set_name = await this.getOptionSetNameFromOptionsChoicesInRow(item, this.options_sets_column)
 
     // 2. Check is dupplicated options_set.
     let result = await this.isDupplicatedOptionName(options_set_name)
 
-    this.menu.push(await this.processMenuCSV(item, options_set_name, 6))
+    this.menu.push(await this.processMenuCSV(item, options_set_name, this.options_sets_column))
 
     if (result == NOT_DUPPLICATED_OPTIONS_SET_NAME) {
       // if not dupplicated 
       // 3. convert item row to csv comma style syntax.
-      let csvOptionsText = await this.processItemToOptionSetCSVText(item, options_set_name, 6)
+      let csvOptionsText = await this.processItemToOptionSetCSVText(item, options_set_name, this.options_sets_column)
       // write file
       this.options_sets.push(csvOptionsText)
     }
@@ -91,9 +92,10 @@ class Menu {
     try {
       fs.unlinkSync(outputPath)
     } catch (e) {
-      console.error(e)
+      // console.error(e)
     }
 
+    console.log(fontColor.Yellow, `Saving to: ${outputPath}`)
     this.options_sets.forEach(item => {
       fs.appendFileSync(outputPath, item)
     })
@@ -102,9 +104,9 @@ class Menu {
     try {
       fs.unlinkSync(outputPath)
     } catch (e) {
-      console.error(e)
+      // console.error(e)
     }
-
+    console.log(fontColor.Yellow, `Saving to: ${outputPath}`)
     this.menu.forEach(item => {
       fs.appendFileSync(outputPath, item)
     })

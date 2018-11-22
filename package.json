@@ -9,6 +9,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "bin": {
+    "menu": "./app.js"
+  },
   "dependencies": {
     "csv": "^4.0.0",
     "csv-parse": "^3.2.0"
