@@ -53,7 +53,7 @@ class Menu {
         let csv = ''
           csv = csv + '' + options_set_name + ','
           for (var i = OPTION_FROM; i < item.length; i++) {
-            if ('' !== item[i].replace(/ /, '')) {
+            if ('' !== item[i].replace(/ /g, '')) {
               csv = csv + '' + item[i] + ','
             }
           }
