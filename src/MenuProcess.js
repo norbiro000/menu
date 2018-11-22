@@ -85,20 +85,20 @@ class Menu {
   async pushItem (item) {
     try {
       // 1. Process item to options_set name.
-    let options_set_name = await this.getOptionSetNameFromOptionsChoicesInRow(item, this.options_sets_column)
+      let options_set_name = await this.getOptionSetNameFromOptionsChoicesInRow(item, this.options_sets_column)
 
-    // 2. Check is dupplicated options_set.
-    let result = await this.isDupplicatedOptionName(options_set_name)
+      // 2. Check is dupplicated options_set.
+      let result = await this.isDupplicatedOptionName(options_set_name)
 
-    this.menu.push(await this.processMenuCSV(item, options_set_name, this.options_sets_column))
+      this.menu.push(await this.processMenuCSV(item, options_set_name, this.options_sets_column))
 
-    if (result == NOT_DUPPLICATED_OPTIONS_SET_NAME) {
-      // if not dupplicated 
-      // 3. convert item row to csv comma style syntax.
-      let csvOptionsText = await this.processItemToOptionSetCSVText(item, options_set_name, this.options_sets_column)
-      // write file
-      this.options_sets.push(csvOptionsText)
-    }
+      if (result == NOT_DUPPLICATED_OPTIONS_SET_NAME) {
+        // if not dupplicated 
+        // 3. convert item row to csv comma style syntax.
+        let csvOptionsText = await this.processItemToOptionSetCSVText(item, options_set_name, this.options_sets_column)
+        // write file
+        this.options_sets.push(csvOptionsText)
+      }
 
     } catch (e) {
       console.log(e)
